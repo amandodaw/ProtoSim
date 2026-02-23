@@ -1,9 +1,8 @@
 class_name HungerSystem
 
-func update(entity_data):
-	entity_data.hunger -= entity_data.hunger_variable
-	if entity_data.hunger <= 0:
-		entity_data.hunger = entity_data.max_hunger
-		entity_data.health -= 1
-	
-	
+func update(world : World, delta):
+	for entity in world.query([HungerComponent]):
+		world.get_component(entity, HungerComponent).hunger -= world.get_component(entity, HungerComponent).rate*delta
+		if world.get_component(entity, HungerComponent).hunger <= 0:
+			world.get_component(entity, HungerComponent).hunger = world.get_component(entity, HungerComponent).max_hunger
+			world.get_component(entity, HealthComponent).health -= 1

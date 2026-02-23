@@ -2,7 +2,7 @@ extends Node2D
 class_name World
 
 var player_scene : PackedScene = load("res://scenes/player.tscn")
-var food_scene : PackedScene = load("res://scenes/food.tscn")
+#var food_scene : PackedScene = load("res://scenes/food.tscn")
 var food_tile : Vector2i = Vector2i(5, 2)
 @onready var map_tiles = $Tilemaps/GroundLayer
 @onready var food_tiles = $Tilemaps/FoodLayer
@@ -78,6 +78,7 @@ func register_system(system) -> void:
 	systems.append(system)
 
 func _ready() -> void:
+	ui.world = self
 	#Vincular sistemas. Revisar
 	#action_system.food_tilemap = food_tiles
 	#input_system.action_system = action_system
@@ -90,6 +91,7 @@ func _ready() -> void:
 	register_system(action_system)
 	
 	var player_id = create_entity()
+	ui.player_id = player_id
 	var player_pos = PositionComponent.new()
 	player_pos.value = get_viewport_rect().size / 2
 	add(player_id, player_pos)
@@ -97,7 +99,11 @@ func _ready() -> void:
 	add(player_id, HungerComponent.new())
 	add(player_id, InventoryComponent.new())
 	add(player_id, MovementComponent.new())
+	add(player_id, InputComponent.new())
+	add(player_id, IntentComponent.new())
 	player = player_scene.instantiate()
+	player.world = self
+	player.id = player_id
 	add_child(player)
 
 # =========================

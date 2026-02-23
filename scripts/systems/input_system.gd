@@ -1,12 +1,12 @@
 class_name InputSystem
 
-var action_system : ActionSystem
+func update(world : World, delta):
+	for entity in world.query([InputComponent]):
+		world.get_component(entity, MovementComponent).move = get_direction() * world.get_component(entity, MovementComponent).speed
+		world.get_component(entity, IntentComponent).pick = Input.is_action_pressed("pick")
+		world.get_component(entity, IntentComponent).eat = Input.is_action_pressed("eat")
 
-func player_process(player_data: HumanData):
-	get_direction(player_data)
-	get_action(player_data)
-	
-func get_direction(player: HumanData):
+func get_direction() -> Vector2i :
 	var dir := Vector2i.ZERO
 
 	if Input.is_action_pressed("move_right"):
@@ -18,10 +18,4 @@ func get_direction(player: HumanData):
 	if Input.is_action_pressed("move_up"):
 		dir.y -= 1
 	
-	player.desired_position = dir*player.speed
-
-func get_action(player: HumanData):
-	if Input.is_action_pressed("pick"):
-		action_system.pick_food(player)
-	if Input.is_action_pressed("eat"):
-		action_system.eat_food(player)
+	return dir
