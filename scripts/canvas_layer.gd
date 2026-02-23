@@ -1,14 +1,14 @@
 extends CanvasLayer
 
-var player_data : HumanData
+var world : World
+var player_id : int
 @onready var hunger_label = $HungerLabel
 @onready var health_label = $HealthLabel
 @onready var food_label = $FoodLabel
 
 func _process(delta):
-	if player_data == null:
+	if player_id==null:
 		return
-
-	hunger_label.text = "Hunger: " + str(int(player_data.hunger))
-	food_label.text = "Food: " + str(int(player_data.food))
-	health_label.text = "Health: " + str(player_data.health)
+	hunger_label.text = "Hunger: " + str(int(world.get_component(player_id, HungerComponent).hunger))
+	food_label.text = "Food: " + str(int(world.get_component(player_id, InventoryComponent).food))
+	health_label.text = "Health: " + str(world.get_component(player_id, HealthComponent).health)

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c1lrwxnuiik88"]
 
-[ext_resource type="Script" uid="uid://bvukvmqcvnlkc" path="res://scenes/world.gd" id="1_rwgxs"]
+[ext_resource type="Script" uid="uid://bvukvmqcvnlkc" path="res://scripts/world.gd" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://c1ibauerw1ok6" path="res://scenes/tilemaps.tscn" id="2_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://duxhq0eih4g5r" path="res://scenes/canvas_layer.tscn" id="3_4wyf3"]
 
