@@ -2,7 +2,6 @@ class_name ActionSystem
 
 var food_tilemap : TileMapLayer
 
-func update()
 
 func pick_food(entity_data):
 	if food_tilemap.get_cell_source_id(food_tilemap.local_to_map(entity_data.global_position))!= -1:
