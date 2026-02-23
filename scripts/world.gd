@@ -86,9 +86,11 @@ func _ready() -> void:
 	var input_system := InputSystem.new()
 	var hunger_system := HungerSystem.new()
 	var action_system := ActionSystem.new()
+	var physics_system := PhysicsSystem.new()
 	register_system(input_system)
 	register_system(hunger_system)
 	register_system(action_system)
+	register_system(physics_system)
 	
 	var player_id = create_entity()
 	ui.player_id = player_id
@@ -102,8 +104,9 @@ func _ready() -> void:
 	add(player_id, InputComponent.new())
 	add(player_id, IntentComponent.new())
 	player = player_scene.instantiate()
-	player.world = self
-	player.id = player_id
+	var body_comp = CharacterBodyComponent.new()
+	body_comp.body = player
+	add(player_id, body_comp)
 	add_child(player)
 
 # =========================
@@ -111,6 +114,8 @@ func _ready() -> void:
 # =========================
 func _process(delta):
 	time_acumulator(delta)
+
+func _physics_process(delta: float) -> void:
 	for system in systems:
 		system.update(self, delta)
 

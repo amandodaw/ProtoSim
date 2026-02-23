@@ -1,4 +1,4 @@
 class_name MovementComponent
 
-var move : Vector2i = Vector2i.ZERO
-var speed : float = 100.0
+var move : Vector2 = Vector2.ZERO
+var speed : float = 140.0
