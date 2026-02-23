@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://duxhq0eih4g5r"]
+
+[ext_resource type="Script" uid="uid://5th1rfh1c8ks" path="res://scripts/canvas_layer.gd" id="1_c4rma"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1697175132]
+script = ExtResource("1_c4rma")
+
+[node name="HungerLabel" type="Label" parent="." unique_id=555667763]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="FoodLabel" type="Label" parent="." unique_id=946388985]
+offset_left = 1.0
+offset_top = 29.0
+offset_right = 41.0
+offset_bottom = 52.0
+
+[node name="HealthLabel" type="Label" parent="." unique_id=1366808375]
+offset_left = 1.0
+offset_top = 57.0
+offset_right = 41.0
+offset_bottom = 80.0
