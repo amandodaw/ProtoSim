@@ -11,8 +11,8 @@ var input_system : InputSystem
 var spawn_system : SpawnSystem
 var perception_system : PerceptionSystem
 var goap_planner_system : GoapPlannerSystem
+var goap_execution_system : GoapExecutionSystem
 var world_state_system : WorldStateSystem
-#var ai_system : AISystem
 var hunger_system : HungerSystem
 var plant_system : PlantSystem
 var action_system : ActionSystem
@@ -28,6 +28,12 @@ func create_entity() -> int:
 	var id = _next_entity_id
 	_next_entity_id += 1
 	return id
+
+func entity_exists(entity: int) -> bool:
+	for type in components.keys():
+		if components[type].has(entity):
+			return true
+	return false
 
 # =========================
 # COMPONENTES
@@ -106,7 +112,7 @@ func _ready() -> void:
 	perception_system = PerceptionSystem.new()
 	world_state_system = WorldStateSystem.new()
 	goap_planner_system = GoapPlannerSystem.new()
-	#ai_system = AISystem.new()
+	goap_execution_system = GoapExecutionSystem.new()
 	hunger_system = HungerSystem.new()
 	plant_system = PlantSystem.new()
 	action_system = ActionSystem.new()
@@ -114,9 +120,9 @@ func _ready() -> void:
 
 	register_system(input_system)
 	register_system(spawn_system)
-	#register_system(ai_system)
 	register_system(world_state_system)
 	register_system(goap_planner_system)
+	register_system(goap_execution_system)
 	register_system(perception_system)
 	register_system(hunger_system)
 	register_system(plant_system)
@@ -170,7 +176,6 @@ func create_npc():
 	add(npc_id, IntentComponent.new())
 	add(npc_id, AgentWorldStateComponent.new())
 	add(npc_id, InventoryComponent.new())
-	add(npc_id, AIComponent.new())
 	add(npc_id, PerceptionComponent.new())
 	add(npc_id, VisiblePlantsComponent.new())
 	add(npc_id, GoapPlanComponent.new())

@@ -12,7 +12,7 @@ func update(world: World, delta: float):
 		var state_comp = world.get_component(entity, AgentWorldStateComponent)
 		var plan_comp = world.get_component(entity, GoapPlanComponent)
 
-		if plan_comp.actions.is_empty():
+		if plan_comp.plan.is_empty():
 
 			var state = world_state_to_dict(state_comp)
 			var goal = { "hungry": false }
@@ -20,15 +20,16 @@ func update(world: World, delta: float):
 
 			var plan = planner.plan(state, goal, actions)
 
+			for action in plan:
+				action.reset()
+				
 			if not plan.is_empty():
-				plan_comp.actions = plan
+				plan_comp.plan = plan
 				plan_comp.current_index = 0
 
 			var names := []
 			for a in plan:
 				names.append(a.name)
-
-			print("NEW PLAN:", names)
 
 static func world_state_to_dict(state) -> Dictionary:
 	return {

@@ -1,4 +1,4 @@
 class_name GoapPlanComponent
 
-var actions : Array = []
+var plan : Array = []
 var current_index : int = 0
