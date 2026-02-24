@@ -10,8 +10,9 @@ var player_scene : PackedScene = load("res://scenes/player.tscn")
 var input_system : InputSystem
 var spawn_system : SpawnSystem
 var perception_system : PerceptionSystem
+var goap_planner_system : GoapPlannerSystem
 var world_state_system : WorldStateSystem
-var ai_system : AISystem
+#var ai_system : AISystem
 var hunger_system : HungerSystem
 var plant_system : PlantSystem
 var action_system : ActionSystem
@@ -103,8 +104,9 @@ func _ready() -> void:
 	input_system = InputSystem.new()
 	spawn_system = SpawnSystem.new()
 	perception_system = PerceptionSystem.new()
+	goap_planner_system = GoapPlannerSystem.new()
 	world_state_system = WorldStateSystem.new()
-	ai_system = AISystem.new()
+	#ai_system = AISystem.new()
 	hunger_system = HungerSystem.new()
 	plant_system = PlantSystem.new()
 	action_system = ActionSystem.new()
@@ -112,7 +114,8 @@ func _ready() -> void:
 
 	register_system(input_system)
 	register_system(spawn_system)
-	register_system(ai_system)
+	#register_system(ai_system)
+	register_system(goap_planner_system)
 	register_system(world_state_system)
 	register_system(perception_system)
 	register_system(hunger_system)
@@ -170,6 +173,7 @@ func create_npc():
 	add(npc_id, AIComponent.new())
 	add(npc_id, PerceptionComponent.new())
 	add(npc_id, VisiblePlantsComponent.new())
+	add(npc_id, GoapPlanComponent.new())
 
 	var npc_node = player_scene.instantiate()   # reutilizas sprite si quieres
 	var body = CharacterBodyComponent.new()

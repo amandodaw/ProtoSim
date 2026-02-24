@@ -39,4 +39,3 @@ func update(world: World, delta: float):
 			intent.pick = true
 		else:
 			move.direction = dir.normalized()
-		print("NPC direction:", move.direction)
