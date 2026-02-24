@@ -16,7 +16,6 @@ func update(world: World, delta: float):
 
 			var state = world_state_to_dict(state_comp)
 			var goal = { "hungry": false }
-
 			var actions = GoapActionsRegistry.get_default_actions()
 
 			var plan = planner.plan(state, goal, actions)
@@ -24,9 +23,12 @@ func update(world: World, delta: float):
 			if not plan.is_empty():
 				plan_comp.actions = plan
 				plan_comp.current_index = 0
-				print("NEW PLAN:")
-				for a in plan:
-					print(a.name)
+
+			var names := []
+			for a in plan:
+				names.append(a.name)
+
+			print("NEW PLAN:", names)
 
 static func world_state_to_dict(state) -> Dictionary:
 	return {

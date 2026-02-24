@@ -21,8 +21,7 @@ func update(world: World, delta: float):
 		# --------------------------------
 		# ESTADO INTERNO
 		# --------------------------------
-
-		state.hungry = hunger.hunger < 50
+		state.hungry = hunger.value < 50
 		state.has_food = inventory.food > 0
 
 		# --------------------------------
