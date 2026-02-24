@@ -1,4 +1,4 @@
-class_name  PlantGrowSystem
+class_name  PlantSystem
 var spawn_timer : float = 0.0
 var spawn_interval : float = 7.0
 var plant_tiles = {
@@ -20,14 +20,26 @@ func update(world : World, delta):
 			world.food_tiles.set_cell(comp.cell, 0, new_tile)
 			print("la planta ha crecido al stage: ", comp.stage)
 			
-	spawn_timer += delta
-	if spawn_timer >= spawn_interval:
-		spawn_timer = 0.0
-		spawn_food_random(world)
 
-func spawn_food_random(world : World):
-	var cells = world.map_tiles.get_used_cells()  
-	if cells.is_empty():
-		return
-	var cell = cells.pick_random()
-	world.spawn_plant(cell, plant_tiles[0])
+
+func harvest(world: World, plant_entity: int, harvester: int):
+
+	var grow = world.get_component(plant_entity, PlantGrowComponent)
+
+	if grow.stage < grow.max_stage:
+		return false
+
+	# borrar tile
+	world.food_tiles.erase_cell(grow.cell)
+
+	# borrar mapping
+	world.cell_to_entity.erase(grow.cell)
+
+	# destruir entidad planta
+	world.destroy_entity(plant_entity)
+
+	# dar comida al recolector
+	var inv = world.get_component(harvester, InventoryComponent)
+	inv.food += 1
+
+	return true

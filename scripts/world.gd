@@ -7,6 +7,13 @@ var player_scene : PackedScene = load("res://scenes/player.tscn")
 @onready var food_tiles = $Tilemaps/FoodLayer
 @onready var ui = $CanvasLayer
 
+var input_system : InputSystem
+var spawn_system : SpawnSystem
+var hunger_system : HungerSystem
+var plant_system : PlantSystem
+var action_system : ActionSystem
+var physics_system : PhysicsSystem
+
 # =========================================================
 # ENTIDADES
 # =========================================================
@@ -90,15 +97,17 @@ func _ready() -> void:
 	#action_system.food_tilemap = food_tiles
 	#input_system.action_system = action_system
 	#ui.player_data = player_data
-	var input_system := InputSystem.new()
-	var hunger_system := HungerSystem.new()
-	var plant_grow_system := PlantGrowSystem.new()
-	var action_system := ActionSystem.new()
-	var physics_system := PhysicsSystem.new()
+	input_system = InputSystem.new()
+	spawn_system = SpawnSystem.new()
+	hunger_system = HungerSystem.new()
+	plant_system = PlantSystem.new()
+	action_system = ActionSystem.new()
+	physics_system = PhysicsSystem.new()
 
 	register_system(input_system)
+	register_system(spawn_system)
 	register_system(hunger_system)
-	register_system(plant_grow_system)
+	register_system(plant_system)
 	register_system(action_system)
 	register_system(physics_system)
 
@@ -129,17 +138,3 @@ func _physics_process(delta: float) -> void:
 
 var player 
 var cell_to_entity : Dictionary = {}
-func spawn_plant(cell, plant_tile):
-	if cell_to_entity.has(cell):
-		return
-	food_tiles.set_cell(cell, 0, plant_tile)
-	var plant_id = create_entity()
-	var grow_comp = PlantGrowComponent.new()
-	add(plant_id, grow_comp)
-	grow_comp.cell = cell
-	var plant_pos = PositionComponent.new()
-	plant_pos.value = food_tiles.map_to_local(cell)
-	add(plant_id, plant_pos)
-	cell_to_entity[cell] = plant_id
-	print("food spawned at ", cell)
-	
