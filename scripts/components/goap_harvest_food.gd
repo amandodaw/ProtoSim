@@ -26,7 +26,6 @@ func perform(world, entity):
 	var perception = world.get_component(entity, PerceptionComponent)
 	var visible_plants = world.get_component(entity, VisiblePlantsComponent)
 	var position = world.get_component(entity, PositionComponent)
-	var inventory = world.get_component(entity, InventoryComponent)
 
 	if perception == null or visible_plants.plants.is_empty():
 		return
@@ -47,11 +46,8 @@ func perform(world, entity):
 	if dist > harvest_distance:
 		return
 
-	# recoger planta
-	world.destroy_entity(target_plant)
-	inventory.food += 1
-
-	harvested = true
+	if world.plant_system.harvest(world, target_plant, entity):
+		harvested = true
 
 
 func is_done(world, entity):

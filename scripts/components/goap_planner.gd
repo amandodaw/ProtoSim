@@ -4,6 +4,8 @@ class_name GoapPlanner
 func plan(initial_state: Dictionary, goal: Dictionary, actions: Array) -> Array:
 
 	var frontier : Array = []
+	var visited := {}
+	visited[state_key(initial_state)] = true
 	frontier.append({
 		"state": initial_state,
 		"plan": []
@@ -24,6 +26,10 @@ func plan(initial_state: Dictionary, goal: Dictionary, actions: Array) -> Array:
 				continue
 
 			var new_state = apply_effects(current_state, action.effects)
+			var new_state_key = state_key(new_state)
+			if visited.has(new_state_key):
+				continue
+			visited[new_state_key] = true
 			var new_plan = current_plan.duplicate()
 			new_plan.append(action)
 
@@ -33,6 +39,15 @@ func plan(initial_state: Dictionary, goal: Dictionary, actions: Array) -> Array:
 			})
 
 	return []
+
+
+func state_key(state: Dictionary) -> String:
+	var keys = state.keys()
+	keys.sort()
+	var parts: Array = []
+	for key in keys:
+		parts.append("%s=%s" % [str(key), str(state[key])])
+	return "|".join(parts)
 
 
 func goal_reached(state: Dictionary, goal: Dictionary) -> bool:
