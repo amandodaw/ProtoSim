@@ -5,7 +5,6 @@ var planner := GoapPlanner.new()
 func update(world: World, delta: float):
 
 	for entity in world.query([
-		AIComponent,
 		AgentWorldStateComponent,
 		GoapPlanComponent
 	]):
