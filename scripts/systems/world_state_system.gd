@@ -2,9 +2,9 @@ class_name WorldStateSystem
 
 var reach_distance := 20.0
 
-func update(world: World, delta: float):
+func update(ctx: GameContext, delta: float):
 
-	for entity in world.query([
+	for entity in ctx.registry.query([
 		AgentWorldStateComponent,
 		HungerComponent,
 		InventoryComponent,
@@ -12,11 +12,11 @@ func update(world: World, delta: float):
 		PositionComponent
 	]):
 
-		var state = world.get_component(entity, AgentWorldStateComponent)
-		var hunger = world.get_component(entity, HungerComponent)
-		var inventory = world.get_component(entity, InventoryComponent)
-		var visible = world.get_component(entity, VisiblePlantsComponent)
-		var pos = world.get_component(entity, PositionComponent)
+		var state = ctx.registry.get_component(entity, AgentWorldStateComponent)
+		var hunger = ctx.registry.get_component(entity, HungerComponent)
+		var inventory = ctx.registry.get_component(entity, InventoryComponent)
+		var visible = ctx.registry.get_component(entity, VisiblePlantsComponent)
+		var pos = ctx.registry.get_component(entity, PositionComponent)
 
 		# --------------------------------
 		# ESTADO INTERNO
@@ -32,7 +32,7 @@ func update(world: World, delta: float):
 		state.food_reachable = false
 
 		if visible.closest != -1:
-			var plant_pos = world.get_component(
+			var plant_pos = ctx.registry.get_component(
 				visible.closest,
 				PositionComponent
 			)

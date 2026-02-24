@@ -2,15 +2,15 @@ class_name GoapPlannerSystem
 
 var planner := GoapPlanner.new()
 
-func update(world: World, delta: float):
+func update(ctx: GameContext, delta: float):
 
-	for entity in world.query([
+	for entity in ctx.registry.query([
 		AgentWorldStateComponent,
 		GoapPlanComponent
 	]):
 
-		var state_comp = world.get_component(entity, AgentWorldStateComponent)
-		var plan_comp = world.get_component(entity, GoapPlanComponent)
+		var state_comp = ctx.registry.get_component(entity, AgentWorldStateComponent)
+		var plan_comp = ctx.registry.get_component(entity, GoapPlanComponent)
 
 		if plan_comp.plan.is_empty():
 

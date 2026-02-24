@@ -18,14 +18,14 @@ func _init():
 	}
 
 
-func perform(world, entity):
+func perform(ctx: GameContext, entity: int):
 
 	if harvested:
 		return
 
-	var perception = world.get_component(entity, PerceptionComponent)
-	var visible_plants = world.get_component(entity, VisiblePlantsComponent)
-	var position = world.get_component(entity, PositionComponent)
+	var perception = ctx.registry.get_component(entity, PerceptionComponent)
+	var visible_plants = ctx.registry.get_component(entity, VisiblePlantsComponent)
+	var position = ctx.registry.get_component(entity, PositionComponent)
 
 	if perception == null or visible_plants.plants.is_empty():
 		return
@@ -33,11 +33,11 @@ func perform(world, entity):
 	if target_plant == null:
 		target_plant = visible_plants.plants[0]
 
-	if not world.entity_exists(target_plant):
+	if not ctx.registry.entity_exists(target_plant):
 		target_plant = null
 		return
 
-	var plant_pos = world.get_component(target_plant, PositionComponent)
+	var plant_pos = ctx.registry.get_component(target_plant, PositionComponent)
 	if plant_pos == null:
 		return
 
@@ -46,11 +46,11 @@ func perform(world, entity):
 	if dist > harvest_distance:
 		return
 
-	if world.plant_system.harvest(world, target_plant, entity):
+	if ctx.agent_actions.harvest_entity(ctx, entity, target_plant):
 		harvested = true
 
 
-func is_done(world, entity):
+func is_done(ctx: GameContext, entity: int):
 	return harvested
 
 

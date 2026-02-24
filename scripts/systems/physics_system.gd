@@ -1,16 +1,16 @@
 class_name PhysicsSystem
 
-func update(world, delta):
+func update(ctx: GameContext, delta: float):
 
-	for e in world.query([
+	for e in ctx.registry.query([
 		MovementComponent,
 		CharacterBodyComponent,
 		PositionComponent
 	]):
 
-		var mov = world.get_component(e, MovementComponent)
-		var body = world.get_component(e, CharacterBodyComponent).body
-		var pos = world.get_component(e, PositionComponent)
+		var mov = ctx.registry.get_component(e, MovementComponent)
+		var body = ctx.registry.get_component(e, CharacterBodyComponent).body
+		var pos = ctx.registry.get_component(e, PositionComponent)
 
 		var dir = mov.direction
 		if dir != Vector2.ZERO:

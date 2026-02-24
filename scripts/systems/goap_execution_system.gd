@@ -1,14 +1,14 @@
 class_name GoapExecutionSystem
 
 
-func update(world, delta):
+func update(ctx: GameContext, delta: float):
 
-	for entity in world.query([
+	for entity in ctx.registry.query([
 		GoapPlanComponent,
 		IntentComponent
 	]):
 
-		var plan_comp = world.get_component(entity, GoapPlanComponent)
+		var plan_comp = ctx.registry.get_component(entity, GoapPlanComponent)
 
 		# no plan → nada que hacer
 		if plan_comp.plan.is_empty():
@@ -23,8 +23,8 @@ func update(world, delta):
 		var action = plan_comp.plan[plan_comp.current_index]
 
 		# ejecutar acción
-		action.perform(world, entity)
+		action.perform(ctx, entity)
 
 		# comprobar si terminó
-		if action.is_done(world, entity):
+		if action.is_done(ctx, entity):
 			plan_comp.current_index += 1

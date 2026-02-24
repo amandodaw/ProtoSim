@@ -1,12 +1,12 @@
 class_name PerceptionSystem
 
-func update(world: World, delta: float):
+func update(ctx: GameContext, delta: float):
 
-	for entity in world.query([PerceptionComponent, PositionComponent, VisiblePlantsComponent]):
+	for entity in ctx.registry.query([PerceptionComponent, PositionComponent, VisiblePlantsComponent]):
 
-		var perception = world.get_component(entity, PerceptionComponent)
-		var pos = world.get_component(entity, PositionComponent)
-		var visible = world.get_component(entity, VisiblePlantsComponent)
+		var perception = ctx.registry.get_component(entity, PerceptionComponent)
+		var pos = ctx.registry.get_component(entity, PositionComponent)
+		var visible = ctx.registry.get_component(entity, VisiblePlantsComponent)
 
 		# reset resultados
 		visible.plants.clear()
@@ -14,13 +14,13 @@ func update(world: World, delta: float):
 		visible.closest_distance = INF
 
 		# buscar plantas maduras
-		for plant in world.query([PlantGrowComponent, PositionComponent]):
+		for plant in ctx.registry.query([PlantGrowComponent, PositionComponent]):
 
-			var grow = world.get_component(plant, PlantGrowComponent)
+			var grow = ctx.registry.get_component(plant, PlantGrowComponent)
 			if grow.stage < grow.max_stage:
 				continue
 
-			var plant_pos = world.get_component(plant, PositionComponent)
+			var plant_pos = ctx.registry.get_component(plant, PositionComponent)
 
 			var dist = pos.value.distance_to(plant_pos.value)
 

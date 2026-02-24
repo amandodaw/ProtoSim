@@ -17,13 +17,13 @@ func _init():
 	}
 
 
-func perform(world, entity):
+func perform(ctx: GameContext, entity: int):
 
 	if eaten:
 		return
 
-	var hunger = world.get_component(entity, HungerComponent)
-	var inventory = world.get_component(entity, InventoryComponent)
+	var hunger = ctx.registry.get_component(entity, HungerComponent)
+	var inventory = ctx.registry.get_component(entity, InventoryComponent)
 
 	if hunger == null or inventory == null:
 		return
@@ -31,13 +31,11 @@ func perform(world, entity):
 	if inventory.food <= 0:
 		return
 
-	inventory.food -= 1
-	hunger.value += eat_amount
-
-	eaten = true
+	if ctx.agent_actions.eat(ctx, entity, eat_amount):
+		eaten = true
 
 
-func is_done(world, entity):
+func is_done(ctx: GameContext, entity: int):
 	return eaten
 
 

@@ -1,31 +1,18 @@
 class_name ActionSystem
 
-func update(world:World, delta):
-	for entity in world.query([IntentComponent]):
-		var intent = world.get_component(entity, IntentComponent)
+func update(ctx: GameContext, delta: float):
+	for entity in ctx.registry.query([IntentComponent]):
+		var intent = ctx.registry.get_component(entity, IntentComponent)
 		if intent.pick:
-			pick_food(world, entity)
+			pick_food(ctx, entity)
 			intent.pick = false
 		if intent.eat:
-			eat_food(world, entity)
+			eat_food(ctx, entity)
 			intent.eat = false
 		
 
-func pick_food(world : World, entity : int):
+func pick_food(ctx: GameContext, entity: int):
+	ctx.agent_actions.harvest(ctx, entity)
 
-	var pos = world.get_component(entity, PositionComponent).value
-	var cell = world.food_tiles.local_to_map(pos)
-
-	if not world.cell_to_entity.has(cell):
-		return
-
-	var plant_id = world.cell_to_entity[cell]
-
-	world.plant_system.harvest(world, plant_id, entity)
-
-func eat_food(world: World, entity : int):
-	var inventory = world.get_component(entity, InventoryComponent)
-	var hunger = world.get_component(entity, HungerComponent)
-	if inventory.food >0 && hunger.value < 150:
-		inventory.food -= 1
-		hunger.value += 50
+func eat_food(ctx: GameContext, entity: int):
+	ctx.agent_actions.eat(ctx, entity)
