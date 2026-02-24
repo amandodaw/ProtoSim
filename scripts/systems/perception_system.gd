@@ -13,21 +13,18 @@ func update(ctx: GameContext, delta: float):
 		visible.closest = -1
 		visible.closest_distance = INF
 
-		# buscar plantas maduras
-		for plant in ctx.registry.query([PlantGrowComponent, PositionComponent]):
-
-			var grow = ctx.registry.get_component(plant, PlantGrowComponent)
-			if grow.stage < grow.max_stage:
+		# buscar plantas maduras en estado de dominio
+		for plant_id in ctx.game_state.plants.keys():
+			var plant = ctx.game_state.get_plant(plant_id)
+			if plant == null or plant.stage < plant.max_stage:
 				continue
 
-			var plant_pos = ctx.registry.get_component(plant, PositionComponent)
-
-			var dist = pos.value.distance_to(plant_pos.value)
+			var dist = pos.value.distance_to(plant.position)
 
 			if dist > perception.radius:
 				continue
 
-			visible.plants.append(plant)
+			visible.plants.append(plant_id)
 
 			if dist < visible.closest_distance:
 				visible.closest_distance = dist

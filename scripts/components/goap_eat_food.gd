@@ -22,15 +22,6 @@ func perform(ctx: GameContext, entity: int):
 	if eaten:
 		return
 
-	var hunger = ctx.registry.get_component(entity, HungerComponent)
-	var inventory = ctx.registry.get_component(entity, InventoryComponent)
-
-	if hunger == null or inventory == null:
-		return
-
-	if inventory.food <= 0:
-		return
-
 	if ctx.agent_actions.eat(ctx, entity, eat_amount):
 		eaten = true
 

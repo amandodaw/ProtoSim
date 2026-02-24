@@ -20,12 +20,15 @@ var hunger_system : HungerSystem
 var plant_system : PlantSystem
 var action_system : ActionSystem
 var physics_system : PhysicsSystem
+var godot_world_sync_system
 
 func _ready() -> void:
 	registry = EcsRegistry.new()
 	ctx = GameContext.new()
 	scheduler = SystemScheduler.new()
 	ctx.registry = registry
+	ctx.game_state = preload("res://scripts/domain/state/game_state.gd").new()
+	ctx.event_bus = preload("res://scripts/domain/events/domain_event_bus.gd").new()
 	ctx.map_tiles = map_tiles
 	ctx.food_tiles = food_tiles
 	ctx.ui = ui
@@ -41,6 +44,7 @@ func _ready() -> void:
 	plant_system = PlantSystem.new()
 	action_system = ActionSystem.new()
 	physics_system = PhysicsSystem.new()
+	godot_world_sync_system = preload("res://scripts/infrastructure/godot/godot_world_sync_system.gd").new()
 	ctx.plant_system = plant_system
 
 	ui.ctx = ctx
@@ -55,6 +59,7 @@ func _ready() -> void:
 	scheduler.register_system(plant_system)
 	scheduler.register_system(action_system)
 	scheduler.register_system(physics_system)
+	scheduler.register_system(godot_world_sync_system)
 
 	create_player()
 	create_npc()
@@ -68,16 +73,20 @@ func create_player():
 	var player_id = registry.create_entity()
 	ui.player_id = player_id
 	var player_pos = PositionComponent.new()
+	var player_hunger = HungerComponent.new()
+	var player_inventory = InventoryComponent.new()
+	var player_health = HealthComponent.new()
 	player_pos.value = get_viewport_rect().size / 2
 	registry.add(player_id, player_pos)
-	registry.add(player_id, HealthComponent.new())
-	registry.add(player_id, HungerComponent.new())
-	registry.add(player_id, InventoryComponent.new())
+	registry.add(player_id, player_health)
+	registry.add(player_id, player_hunger)
+	registry.add(player_id, player_inventory)
 	registry.add(player_id, MovementComponent.new())
 	registry.add(player_id, InputComponent.new())
 	registry.add(player_id, IntentComponent.new())
 	registry.add(player_id, PerceptionComponent.new())
 	registry.add(player_id, VisiblePlantsComponent.new())
+	ctx.game_state.register_agent(player_id, player_hunger, player_inventory, player_health)
 	player = player_scene.instantiate()
 	var body_comp = CharacterBodyComponent.new()
 	body_comp.body = player
@@ -89,18 +98,22 @@ func create_npc():
 	var npc_id = registry.create_entity()
 
 	var pos = PositionComponent.new()
+	var npc_hunger = HungerComponent.new()
+	var npc_inventory = InventoryComponent.new()
+	var npc_health = HealthComponent.new()
 	pos.value = Vector2(300, 300)
 	registry.add(npc_id, pos)
 
 	registry.add(npc_id, MovementComponent.new())
 	registry.add(npc_id, IntentComponent.new())
 	registry.add(npc_id, AgentWorldStateComponent.new())
-	registry.add(npc_id, InventoryComponent.new())
+	registry.add(npc_id, npc_inventory)
 	registry.add(npc_id, PerceptionComponent.new())
 	registry.add(npc_id, VisiblePlantsComponent.new())
 	registry.add(npc_id, GoapPlanComponent.new())
-	registry.add(npc_id, HungerComponent.new())
-	registry.add(npc_id, HealthComponent.new())
+	registry.add(npc_id, npc_hunger)
+	registry.add(npc_id, npc_health)
+	ctx.game_state.register_agent(npc_id, npc_hunger, npc_inventory, npc_health)
 
 	var npc_node = player_scene.instantiate()
 	var body = CharacterBodyComponent.new()

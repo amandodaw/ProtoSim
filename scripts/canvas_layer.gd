@@ -7,8 +7,13 @@ var player_id : int = -1
 @onready var food_label = $FoodLabel
 
 func _process(delta):
-	if ctx == null or ctx.registry == null or player_id < 0:
+	if ctx == null or ctx.game_state == null or player_id < 0:
 		return
-	hunger_label.text = "Hunger: " + str(int(ctx.registry.get_component(player_id, HungerComponent).value))
-	food_label.text = "Food: " + str(int(ctx.registry.get_component(player_id, InventoryComponent).food))
-	health_label.text = "Health: " + str(ctx.registry.get_component(player_id, HealthComponent).health)
+
+	var agent = ctx.game_state.get_agent(player_id)
+	if agent == null:
+		return
+
+	hunger_label.text = "Hunger: " + str(int(agent.hunger))
+	food_label.text = "Food: " + str(agent.food)
+	health_label.text = "Health: " + str(agent.health)

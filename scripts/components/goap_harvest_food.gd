@@ -23,25 +23,24 @@ func perform(ctx: GameContext, entity: int):
 	if harvested:
 		return
 
-	var perception = ctx.registry.get_component(entity, PerceptionComponent)
 	var visible_plants = ctx.registry.get_component(entity, VisiblePlantsComponent)
 	var position = ctx.registry.get_component(entity, PositionComponent)
 
-	if perception == null or visible_plants.plants.is_empty():
+	if visible_plants == null or visible_plants.plants.is_empty():
 		return
 
 	if target_plant == null:
 		target_plant = visible_plants.plants[0]
 
-	if not ctx.registry.entity_exists(target_plant):
+	if not ctx.game_state.has_plant(target_plant):
 		target_plant = null
 		return
 
-	var plant_pos = ctx.registry.get_component(target_plant, PositionComponent)
-	if plant_pos == null:
+	var plant = ctx.game_state.get_plant(target_plant)
+	if plant == null:
 		return
 
-	var dist = position.value.distance_to(plant_pos.value)
+	var dist = position.value.distance_to(plant.position)
 
 	if dist > harvest_distance:
 		return

@@ -1,11 +1,9 @@
 class_name SpawnSystem
 
+const DomainEventsRef = preload("res://scripts/domain/events/events.gd")
+
 var spawn_timer : float = 0.0
 var spawn_interval : float = 1.0
-
-var plant_tiles = {
-	0: Vector2i(2,1) 
-}
 
 func update(ctx: GameContext, delta: float):
 
@@ -22,7 +20,7 @@ func spawn_food_random(ctx: GameContext):
 
 	var cell = cells.pick_random()
 
-	if ctx.cell_to_entity.has(cell):
+	if ctx.game_state.get_plant_id_by_cell(cell) != -1:
 		return
 
 	spawn_plant(ctx, cell)
@@ -30,14 +28,6 @@ func spawn_food_random(ctx: GameContext):
 func spawn_plant(ctx: GameContext, cell: Vector2i):
 
 	var plant_id = ctx.registry.create_entity()
-
-	var grow = PlantGrowComponent.new()
-	grow.cell = cell
-	ctx.registry.add(plant_id, grow)
-
-	var pos = PositionComponent.new()
-	pos.value = ctx.food_tiles.map_to_local(cell)
-	ctx.registry.add(plant_id, pos)
-
-	ctx.food_tiles.set_cell(cell, 0, plant_tiles[0])
-	ctx.cell_to_entity[cell] = plant_id
+	var position = ctx.food_tiles.map_to_local(cell)
+	var plant_state = ctx.game_state.add_plant(plant_id, cell, position)
+	ctx.event_bus.publish(DomainEventsRef.plant_spawned(plant_id, cell, plant_state.stage))
