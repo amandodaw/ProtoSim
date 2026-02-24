@@ -20,6 +20,11 @@ func pick_food(world: World, entity: int):
 		return
 
 	var plant_id = world.cell_to_entity[cell]
+	var grow = world.get_component(plant_id, PlantGrowComponent)
+
+	if grow.stage < grow.max_stage:
+		print("plant not mature yet")
+		return
 
 	world.food_tiles.erase_cell(cell)
 	world.cell_to_entity.erase(cell)

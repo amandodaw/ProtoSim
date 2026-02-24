@@ -134,7 +134,9 @@ func spawn_plant(cell, plant_tile):
 		return
 	food_tiles.set_cell(cell, 0, plant_tile)
 	var plant_id = create_entity()
-	add(plant_id, PlantGrowComponent.new())
+	var grow_comp = PlantGrowComponent.new()
+	add(plant_id, grow_comp)
+	grow_comp.cell = cell
 	var plant_pos = PositionComponent.new()
 	plant_pos.value = food_tiles.map_to_local(cell)
 	add(plant_id, plant_pos)
