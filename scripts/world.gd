@@ -10,6 +10,7 @@ var player_scene : PackedScene = load("res://scenes/player.tscn")
 var input_system : InputSystem
 var spawn_system : SpawnSystem
 var perception_system : PerceptionSystem
+var world_state_system : WorldStateSystem
 var ai_system : AISystem
 var hunger_system : HungerSystem
 var plant_system : PlantSystem
@@ -102,6 +103,7 @@ func _ready() -> void:
 	input_system = InputSystem.new()
 	spawn_system = SpawnSystem.new()
 	perception_system = PerceptionSystem.new()
+	world_state_system = WorldStateSystem.new()
 	ai_system = AISystem.new()
 	hunger_system = HungerSystem.new()
 	plant_system = PlantSystem.new()
@@ -111,6 +113,7 @@ func _ready() -> void:
 	register_system(input_system)
 	register_system(spawn_system)
 	register_system(ai_system)
+	register_system(world_state_system)
 	register_system(perception_system)
 	register_system(hunger_system)
 	register_system(plant_system)
@@ -162,6 +165,7 @@ func create_npc():
 
 	add(npc_id, MovementComponent.new())
 	add(npc_id, IntentComponent.new())
+	add(npc_id, AgentWorldStateComponent.new())
 	add(npc_id, InventoryComponent.new())
 	add(npc_id, AIComponent.new())
 	add(npc_id, PerceptionComponent.new())
