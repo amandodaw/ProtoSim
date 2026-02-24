@@ -2,20 +2,34 @@ class_name ActionSystem
 
 func update(world:World, delta):
 	for entity in world.query([IntentComponent]):
-		if world.get_component(entity, IntentComponent).pick:
+		var intent = world.get_component(entity, IntentComponent)
+		if intent.pick:
 			pick_food(world, entity)
-		if world.get_component(entity, IntentComponent).eat:
+			intent.pick = false
+		if intent.eat:
 			eat_food(world, entity)
+			intent.eat = false
 		
 
+func pick_food(world: World, entity: int):
 
-func pick_food(world : World, entity : int):
-	if world.food_tiles.get_cell_source_id(world.food_tiles.local_to_map(world.get_component(entity, PositionComponent).value))!= -1:
-		world.food_tiles.erase_cell(world.food_tiles.local_to_map(world.get_component(entity, PositionComponent).value))
-		world.get_component(entity, InventoryComponent).food += 1
-		print("food picked")
+	var pos = world.get_component(entity, PositionComponent).value
+	var cell = world.food_tiles.local_to_map(pos)
+
+	if not world.cell_to_entity.has(cell):
+		return
+
+	var plant_id = world.cell_to_entity[cell]
+
+	world.food_tiles.erase_cell(cell)
+	world.cell_to_entity.erase(cell)
+	world.destroy_entity(plant_id)
+	
+	world.get_component(entity, InventoryComponent).food += 1
 
 func eat_food(world: World, entity : int):
-	if world.get_component(entity, InventoryComponent).food >0 && world.get_component(entity, HungerComponent).hunger < 150:
-		world.get_component(entity, InventoryComponent).food -= 1
-		world.get_component(entity, HungerComponent).hunger += 50
+	var inventory = world.get_component(entity, InventoryComponent)
+	var hunger = world.get_component(entity, HungerComponent)
+	if inventory.food >0 && hunger.value < 150:
+		inventory.food -= 1
+		hunger.value += 50

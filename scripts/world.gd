@@ -3,7 +3,6 @@ class_name World
 
 var player_scene : PackedScene = load("res://scenes/player.tscn")
 #var food_scene : PackedScene = load("res://scenes/food.tscn")
-var food_tile : Vector2i = Vector2i(5, 2)
 @onready var map_tiles = $Tilemaps/GroundLayer
 @onready var food_tiles = $Tilemaps/FoodLayer
 @onready var ui = $CanvasLayer
@@ -38,6 +37,14 @@ func get_component(entity: int, type):
 
 func has_component(entity: int, type) -> bool:
 	return components.has(type) and components[type].has(entity)
+
+func remove_component(entity: int, type) -> void:
+	if components.has(type):
+		components[type].erase(entity)
+
+func destroy_entity(entity: int) -> void:
+	for type in components.keys():
+		components[type].erase(entity)
 
 # =========================================================
 # QUERY
@@ -85,12 +92,16 @@ func _ready() -> void:
 	#ui.player_data = player_data
 	var input_system := InputSystem.new()
 	var hunger_system := HungerSystem.new()
+	var plant_grow_system := PlantGrowSystem.new()
 	var action_system := ActionSystem.new()
 	var physics_system := PhysicsSystem.new()
+
 	register_system(input_system)
 	register_system(hunger_system)
+	register_system(plant_grow_system)
 	register_system(action_system)
 	register_system(physics_system)
+
 	
 	var player_id = create_entity()
 	ui.player_id = player_id
@@ -112,45 +123,21 @@ func _ready() -> void:
 # =========================
 # LOOP PRINCIPAL ECS
 # =========================
-func _process(delta):
-	time_acumulator(delta)
-
 func _physics_process(delta: float) -> void:
 	for system in systems:
 		system.update(self, delta)
 
 var player 
-
-# =========================
-# TIMER
-# =========================
-@export var tick_duration := 1.0   # 1 tick = 1 segundo
-var accumulator := 0.0
-var food_tick_counter := 0
-const FOOD_INTERVAL := 5
-
-
-func time_acumulator(delta):
-	accumulator += delta
-	while accumulator >= tick_duration:
-		simulation_tick()
-		accumulator -= tick_duration
-
-func simulation_tick():
-	
-	food_tick_counter += 1
-	
-	if food_tick_counter >= FOOD_INTERVAL:
-		spawn_food_random()
-		food_tick_counter = 0
-	#hunger_system.update(player_data)
-	
-
-func spawn_food_random():
-
-	var cells = map_tiles.get_used_cells()  
-	if cells.is_empty():
+var cell_to_entity : Dictionary = {}
+func spawn_plant(cell, plant_tile):
+	if cell_to_entity.has(cell):
 		return
-	var cell = cells.pick_random()
-	food_tiles.set_cell(cell, 0, food_tile)
+	food_tiles.set_cell(cell, 0, plant_tile)
+	var plant_id = create_entity()
+	add(plant_id, PlantGrowComponent.new())
+	var plant_pos = PositionComponent.new()
+	plant_pos.value = food_tiles.map_to_local(cell)
+	add(plant_id, plant_pos)
+	cell_to_entity[cell] = plant_id
 	print("food spawned at ", cell)
+	
