@@ -1,7 +1,7 @@
 class_name SpawnSystem
 
 var spawn_timer : float = 0.0
-var spawn_interval : float = 7.0
+var spawn_interval : float = 1.0
 
 var plant_tiles = {
 	0: Vector2i(2,1) 

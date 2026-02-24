@@ -2,7 +2,7 @@ class_name InputSystem
 
 func update(world : World, delta):
 	for entity in world.query([InputComponent]):
-		world.get_component(entity, MovementComponent).move = get_direction()
+		world.get_component(entity, MovementComponent).direction = get_direction()
 		world.get_component(entity, IntentComponent).pick = Input.is_action_just_pressed("pick")
 		world.get_component(entity, IntentComponent).eat = Input.is_action_just_pressed("eat")
 

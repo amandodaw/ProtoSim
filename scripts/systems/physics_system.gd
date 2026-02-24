@@ -12,7 +12,7 @@ func update(world, delta):
 		var body = world.get_component(e, CharacterBodyComponent).body
 		var pos = world.get_component(e, PositionComponent)
 
-		var dir = mov.move
+		var dir = mov.direction
 		if dir != Vector2.ZERO:
 			dir = dir.normalized()
 

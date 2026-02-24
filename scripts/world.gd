@@ -9,6 +9,8 @@ var player_scene : PackedScene = load("res://scenes/player.tscn")
 
 var input_system : InputSystem
 var spawn_system : SpawnSystem
+var perception_system : PerceptionSystem
+var ai_system : AISystem
 var hunger_system : HungerSystem
 var plant_system : PlantSystem
 var action_system : ActionSystem
@@ -99,6 +101,8 @@ func _ready() -> void:
 	#ui.player_data = player_data
 	input_system = InputSystem.new()
 	spawn_system = SpawnSystem.new()
+	perception_system = PerceptionSystem.new()
+	ai_system = AISystem.new()
 	hunger_system = HungerSystem.new()
 	plant_system = PlantSystem.new()
 	action_system = ActionSystem.new()
@@ -106,12 +110,29 @@ func _ready() -> void:
 
 	register_system(input_system)
 	register_system(spawn_system)
+	register_system(ai_system)
+	register_system(perception_system)
 	register_system(hunger_system)
 	register_system(plant_system)
 	register_system(action_system)
 	register_system(physics_system)
 
 	
+	create_player()
+	create_npc()
+
+
+# =========================
+# LOOP PRINCIPAL ECS
+# =========================
+func _physics_process(delta: float) -> void:
+	for system in systems:
+		system.update(self, delta)
+
+var player 
+var cell_to_entity : Dictionary = {}
+
+func create_player():
 	var player_id = create_entity()
 	ui.player_id = player_id
 	var player_pos = PositionComponent.new()
@@ -123,18 +144,33 @@ func _ready() -> void:
 	add(player_id, MovementComponent.new())
 	add(player_id, InputComponent.new())
 	add(player_id, IntentComponent.new())
+	add(player_id, PerceptionComponent.new())
+	add(player_id, VisiblePlantsComponent.new())
 	player = player_scene.instantiate()
 	var body_comp = CharacterBodyComponent.new()
 	body_comp.body = player
+	player.position = player_pos.value
 	add(player_id, body_comp)
 	add_child(player)
 
-# =========================
-# LOOP PRINCIPAL ECS
-# =========================
-func _physics_process(delta: float) -> void:
-	for system in systems:
-		system.update(self, delta)
+func create_npc():
+	var npc_id = create_entity()
 
-var player 
-var cell_to_entity : Dictionary = {}
+	var pos = PositionComponent.new()
+	pos.value = Vector2(300, 300)
+	add(npc_id, pos)
+
+	add(npc_id, MovementComponent.new())
+	add(npc_id, IntentComponent.new())
+	add(npc_id, InventoryComponent.new())
+	add(npc_id, AIComponent.new())
+	add(npc_id, PerceptionComponent.new())
+	add(npc_id, VisiblePlantsComponent.new())
+
+	var npc_node = player_scene.instantiate()   # reutilizas sprite si quieres
+	var body = CharacterBodyComponent.new()
+	body.body = npc_node
+	npc_node.position = pos.value
+	add(npc_id, body)
+
+	add_child(npc_node)

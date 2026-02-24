@@ -1,6 +1,5 @@
 class_name  PlantSystem
-var spawn_timer : float = 0.0
-var spawn_interval : float = 7.0
+
 var plant_tiles = {
 	0: Vector2i(2, 1), # semilla
 	1: Vector2i(5, 1), # creciendo
