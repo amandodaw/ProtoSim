@@ -5,6 +5,7 @@ var player_id : int = -1
 @onready var hunger_label = $HungerLabel
 @onready var health_label = $HealthLabel
 @onready var food_label = $FoodLabel
+@onready var wood_label = $WoodLabel
 
 func _process(delta):
 	if ctx == null or ctx.game_state == null or player_id < 0:
@@ -16,4 +17,5 @@ func _process(delta):
 
 	hunger_label.text = "Hunger: " + str(int(agent.hunger))
 	food_label.text = "Food: " + str(agent.food)
+	wood_label.text = "Wood: " + str(agent.wood)
 	health_label.text = "Health: " + str(agent.health)

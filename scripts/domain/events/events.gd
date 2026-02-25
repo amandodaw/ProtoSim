@@ -45,3 +45,31 @@ static func hunger_changed(entity: int, hunger: float, health: int) -> Dictionar
 		"hunger": hunger,
 		"health": health
 	}
+
+
+static func tree_spawned(tree_id: int, cell: Vector2i, stage: int) -> Dictionary:
+	return {
+		"type": "TreeSpawned",
+		"tree_id": tree_id,
+		"cell": cell,
+		"stage": stage
+	}
+
+
+static func tree_grown(tree_id: int, cell: Vector2i, stage: int) -> Dictionary:
+	return {
+		"type": "TreeGrown",
+		"tree_id": tree_id,
+		"cell": cell,
+		"stage": stage
+	}
+
+
+static func tree_chopped(tree_id: int, cell: Vector2i, harvester: int, wood_gained: int) -> Dictionary:
+	return {
+		"type": "TreeChopped",
+		"tree_id": tree_id,
+		"cell": cell,
+		"harvester": harvester,
+		"wood_gained": wood_gained
+	}

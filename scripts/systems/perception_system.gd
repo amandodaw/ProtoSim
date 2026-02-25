@@ -28,4 +28,4 @@ func update(ctx: GameContext, delta: float):
 
 			if dist < visible.closest_distance:
 				visible.closest_distance = dist
-				visible.closest = plant
+				visible.closest = plant_id

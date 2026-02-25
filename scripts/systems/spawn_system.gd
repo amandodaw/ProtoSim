@@ -23,6 +23,9 @@ func spawn_food_random(ctx: GameContext):
 	if ctx.game_state.get_plant_id_by_cell(cell) != -1:
 		return
 
+	if ctx.game_state.get_tree_id_by_cell(cell) != -1:
+		return
+
 	spawn_plant(ctx, cell)
 
 func spawn_plant(ctx: GameContext, cell: Vector2i):

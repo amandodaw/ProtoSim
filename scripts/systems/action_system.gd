@@ -9,6 +9,9 @@ func update(ctx: GameContext, delta: float):
 		if intent.eat:
 			eat_food(ctx, entity)
 			intent.eat = false
+		if intent.chop:
+			chop_tree(ctx, entity)
+			intent.chop = false
 		
 
 func pick_food(ctx: GameContext, entity: int):
@@ -16,3 +19,7 @@ func pick_food(ctx: GameContext, entity: int):
 
 func eat_food(ctx: GameContext, entity: int):
 	ctx.agent_actions.eat(ctx, entity)
+
+
+func chop_tree(ctx: GameContext, entity: int):
+	ctx.agent_actions.chop(ctx, entity)

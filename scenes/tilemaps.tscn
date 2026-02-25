@@ -287,3 +287,6 @@ script = ExtResource("2_bpdrm")
 
 [node name="FoodLayer" type="TileMapLayer" parent="." unique_id=771247248]
 tile_set = SubResource("TileSet_bpdrm")
+
+[node name="TreeLayer" type="TileMapLayer" parent="." unique_id=101902233]
+tile_set = SubResource("TileSet_bpdrm")

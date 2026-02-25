@@ -4,6 +4,7 @@ class_name World
 var player_scene : PackedScene = load("res://scenes/player.tscn")
 @onready var map_tiles = $Tilemaps/GroundLayer
 @onready var food_tiles = $Tilemaps/FoodLayer
+@onready var tree_tiles = $Tilemaps/TreeLayer
 @onready var ui = $CanvasLayer
 
 var ctx: GameContext
@@ -18,6 +19,8 @@ var goap_execution_system : GoapExecutionSystem
 var world_state_system : WorldStateSystem
 var hunger_system : HungerSystem
 var plant_system : PlantSystem
+var tree_spawn_system
+var tree_system
 var action_system : ActionSystem
 var physics_system : PhysicsSystem
 var godot_world_sync_system
@@ -31,6 +34,7 @@ func _ready() -> void:
 	ctx.event_bus = preload("res://scripts/domain/events/domain_event_bus.gd").new()
 	ctx.map_tiles = map_tiles
 	ctx.food_tiles = food_tiles
+	ctx.tree_tiles = tree_tiles
 	ctx.ui = ui
 	ctx.agent_actions = AgentActions.new()
 
@@ -42,21 +46,26 @@ func _ready() -> void:
 	goap_execution_system = GoapExecutionSystem.new()
 	hunger_system = HungerSystem.new()
 	plant_system = PlantSystem.new()
+	tree_spawn_system = preload("res://scripts/systems/tree_spawn_system.gd").new()
+	tree_system = preload("res://scripts/systems/tree_system.gd").new()
 	action_system = ActionSystem.new()
 	physics_system = PhysicsSystem.new()
 	godot_world_sync_system = preload("res://scripts/infrastructure/godot/godot_world_sync_system.gd").new()
 	ctx.plant_system = plant_system
+	ctx.tree_system = tree_system
 
 	ui.ctx = ctx
 
 	scheduler.register_system(input_system)
 	scheduler.register_system(spawn_system)
+	scheduler.register_system(tree_spawn_system)
 	scheduler.register_system(world_state_system)
 	scheduler.register_system(goap_planner_system)
 	scheduler.register_system(goap_execution_system)
 	scheduler.register_system(perception_system)
 	scheduler.register_system(hunger_system)
 	scheduler.register_system(plant_system)
+	scheduler.register_system(tree_system)
 	scheduler.register_system(action_system)
 	scheduler.register_system(physics_system)
 	scheduler.register_system(godot_world_sync_system)

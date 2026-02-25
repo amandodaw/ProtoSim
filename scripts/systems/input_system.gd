@@ -5,6 +5,7 @@ func update(ctx: GameContext, delta: float):
 		ctx.registry.get_component(entity, MovementComponent).direction = get_direction()
 		ctx.registry.get_component(entity, IntentComponent).pick = Input.is_action_just_pressed("pick")
 		ctx.registry.get_component(entity, IntentComponent).eat = Input.is_action_just_pressed("eat")
+		ctx.registry.get_component(entity, IntentComponent).chop = Input.is_action_just_pressed("chop")
 
 func get_direction() -> Vector2i :
 	var dir := Vector2i.ZERO
