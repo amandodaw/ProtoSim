@@ -1,6 +1,8 @@
 class_name WorldStateSystem
 
-var reach_distance := 20.0
+const GameplayConstantsRef = preload("res://scripts/core/gameplay_constants.gd")
+
+var reach_distance := GameplayConstantsRef.FOOD_INTERACTION_DISTANCE
 
 func update(ctx: GameContext, delta: float):
 

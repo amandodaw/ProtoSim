@@ -5,7 +5,7 @@ const EventBusRef = preload("res://scripts/domain/events/domain_event_bus.gd")
 
 
 func run() -> bool:
-	return _test_move_action_uses_closest_target() and _test_harvest_action_uses_closest_target()
+	return _test_move_action_uses_closest_target() and _test_harvest_action_uses_closest_target() and _test_move_action_stops_when_target_is_lost()
 
 
 func _new_context() -> GameContext:
@@ -63,3 +63,28 @@ func _test_harvest_action_uses_closest_target() -> bool:
 	action.perform(ctx, 1)
 
 	return action.target_plant == 21
+
+
+func _test_move_action_stops_when_target_is_lost() -> bool:
+	var ctx = _new_context()
+
+	ctx.game_state.add_plant(30, Vector2i(2, 2), Vector2(100, 0), 2, 2, 5.0)
+
+	var visible = ctx.registry.get_component(1, VisiblePlantsComponent)
+	visible.plants = [30]
+	visible.closest = 30
+
+	var pos = ctx.registry.get_component(1, PositionComponent)
+	pos.value = Vector2.ZERO
+
+	var movement = ctx.registry.get_component(1, MovementComponent)
+	var action = GoapMoveToFood.new()
+	action.perform(ctx, 1)
+
+	if movement.direction == Vector2.ZERO:
+		return false
+
+	ctx.game_state.remove_plant(30)
+	action.perform(ctx, 1)
+
+	return movement.direction == Vector2.ZERO

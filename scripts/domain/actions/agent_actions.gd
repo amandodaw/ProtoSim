@@ -85,9 +85,9 @@ func eat(ctx: GameContext, entity: int, eat_amount: float = 50.0) -> bool:
 	if agent == null:
 		return false
 
-	if agent.food > 0 and agent.hunger < 150:
+	if agent.food > 0 and agent.hunger < agent.max_hunger:
 		agent.food -= 1
-		agent.hunger += eat_amount
+		agent.hunger = minf(agent.hunger + eat_amount, agent.max_hunger)
 
 		var inventory = ctx.registry.get_component(entity, InventoryComponent)
 		if inventory != null:

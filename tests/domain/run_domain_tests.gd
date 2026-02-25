@@ -11,6 +11,7 @@ func _init() -> void:
 		{"name": "tree_chop", "suite": preload("res://tests/domain/test_tree_chop.gd").new()},
 		{"name": "goap_target_selection", "suite": preload("res://tests/domain/test_goap_target_selection.gd").new()},
 		{"name": "goap_execution_stuck_replan", "suite": preload("res://tests/domain/test_goap_execution_stuck_replan.gd").new()},
+		{"name": "world_state_food_reach", "suite": preload("res://tests/domain/test_world_state_food_reach.gd").new()},
 		{"name": "goap_planner", "suite": preload("res://tests/domain/test_goap_planner.gd").new()}
 	]
 

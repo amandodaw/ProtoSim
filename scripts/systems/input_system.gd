@@ -1,7 +1,7 @@
 class_name InputSystem
 
 func update(ctx: GameContext, delta: float):
-	for entity in ctx.registry.query([InputComponent]):
+	for entity in ctx.registry.query([InputComponent, MovementComponent, IntentComponent]):
 		ctx.registry.get_component(entity, MovementComponent).direction = get_direction()
 		ctx.registry.get_component(entity, IntentComponent).pick = Input.is_action_just_pressed("pick")
 		ctx.registry.get_component(entity, IntentComponent).eat = Input.is_action_just_pressed("eat")

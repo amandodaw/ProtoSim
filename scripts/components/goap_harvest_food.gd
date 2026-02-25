@@ -1,9 +1,11 @@
 class_name GoapHarvestFood
 extends GoapAction
 
+const GameplayConstantsRef = preload("res://scripts/core/gameplay_constants.gd")
+
 var harvested := false
 var target_plant = null
-var harvest_distance := 6.0
+var harvest_distance := GameplayConstantsRef.FOOD_INTERACTION_DISTANCE
 
 
 func _init():
