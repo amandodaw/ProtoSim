@@ -3,9 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://dkv8hatvw3pej" path="res://sprites/Human2.png" id="2_g2els"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(14, 14)
+size = Vector2(12, 12)
 
 [node name="Player" type="CharacterBody2D" unique_id=1919316916]
+motion_mode = 1
+safe_margin = 0.01
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=362784750]
 shape = SubResource("RectangleShape2D_g2els")

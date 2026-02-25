@@ -9,6 +9,8 @@ func _init() -> void:
 		{"name": "spawn_food_tree_conflict", "suite": preload("res://tests/domain/test_spawn_food_tree_conflict.gd").new()},
 		{"name": "tree_growth", "suite": preload("res://tests/domain/test_tree_growth.gd").new()},
 		{"name": "tree_chop", "suite": preload("res://tests/domain/test_tree_chop.gd").new()},
+		{"name": "goap_target_selection", "suite": preload("res://tests/domain/test_goap_target_selection.gd").new()},
+		{"name": "goap_execution_stuck_replan", "suite": preload("res://tests/domain/test_goap_execution_stuck_replan.gd").new()},
 		{"name": "goap_planner", "suite": preload("res://tests/domain/test_goap_planner.gd").new()}
 	]
 

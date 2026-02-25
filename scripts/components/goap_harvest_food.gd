@@ -27,10 +27,15 @@ func perform(ctx: GameContext, entity: int):
 	var position = ctx.registry.get_component(entity, PositionComponent)
 
 	if visible_plants == null or visible_plants.plants.is_empty():
+		target_plant = null
 		return
 
 	if target_plant == null:
-		target_plant = visible_plants.plants[0]
+		target_plant = visible_plants.closest
+
+	if target_plant == -1:
+		target_plant = null
+		return
 
 	if not ctx.game_state.has_plant(target_plant):
 		target_plant = null
